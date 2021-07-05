@@ -178,12 +178,6 @@ public class PlayListActivity extends AppCompatActivity implements View.OnClickL
             }
         });
 
-        mBinding.toolbarAbout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(PlayListActivity.this, AboutActivity.class));
-            }
-        });
     }
 
     @Override

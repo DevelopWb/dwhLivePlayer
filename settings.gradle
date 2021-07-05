@@ -1,2 +1,2 @@
-include ':EasyPlayerPro'
+include ':EasyPlayerPro', ':module_Base'
 include ':ijkplayer-java'

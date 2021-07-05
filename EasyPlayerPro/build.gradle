@@ -1,16 +1,26 @@
 apply plugin: 'com.android.application'
-
+def configs = rootProject.ext.android
 android {
-    compileSdkVersion 26
-    buildToolsVersion '28.0.3'
-
+    compileSdkVersion configs.compileSdkVersion
+    signingConfigs {
+        config {
+            keyAlias 'dwh'
+            keyPassword 'dwh2016'
+            storeFile file('push.jks')
+            storePassword 'dwh2016'
+        }
+    }
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
     defaultConfig {
         applicationId "org.easydarwin.easyplayer"
-        minSdkVersion 19
-        targetSdkVersion 26
-        versionCode 14210703
-        versionName "1.4.21.0703"
-
+        minSdkVersion configs.minSdkVersion
+        targetSdkVersion configs.targetSdkVersion
+        versionCode configs.versionCode
+        versionName configs.versionName
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         if (project.hasProperty('PLAYER_KEY')) {
             buildConfigField 'String', 'PLAYER_KEY', PLAYER_KEY
         } else {
@@ -32,6 +42,10 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
+        }
+        debug {
+            signingConfig signingConfigs.config
         }
     }
 
