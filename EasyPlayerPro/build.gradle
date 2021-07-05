@@ -1,26 +1,16 @@
 apply plugin: 'com.android.application'
-def configs = rootProject.ext.android
+
 android {
-    compileSdkVersion configs.compileSdkVersion
-    signingConfigs {
-        config {
-            keyAlias 'dwh'
-            keyPassword 'dwh2016'
-            storeFile file('push.jks')
-            storePassword 'dwh2016'
-        }
-    }
-    compileOptions {
-        sourceCompatibility 1.8
-        targetCompatibility 1.8
-    }
+    compileSdkVersion 26
+    buildToolsVersion '28.0.3'
+
     defaultConfig {
         applicationId "org.easydarwin.easyplayer"
-        minSdkVersion configs.minSdkVersion
-        targetSdkVersion configs.targetSdkVersion
-        versionCode configs.versionCode
-        versionName configs.versionName
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        minSdkVersion 19
+        targetSdkVersion 26
+        versionCode 14210703
+        versionName "1.4.21.0703"
+
         if (project.hasProperty('PLAYER_KEY')) {
             buildConfigField 'String', 'PLAYER_KEY', PLAYER_KEY
         } else {
@@ -42,10 +32,6 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.config
-        }
-        debug {
-            signingConfig signingConfigs.config
         }
     }
 
@@ -108,11 +94,10 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:3.4.1'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     implementation 'com.budiyev.android:code-scanner:1.9.4'
-
+    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.30'
 //    implementation 'com.tencent.bugly:crashreport_upgrade:latest.release'//其中latest.release指代最新版本号，也可以指定明确的版本号，例如1.2.0
 //    implementation 'com.tencent.bugly:nativecrashreport:latest.release' //其中latest.release指代最新版本号，也可以指定明确的版本号，例如2.2.0
 
     testImplementation 'junit:junit:4.12'
     implementation project(':ijkplayer-java')
-    implementation project(path: ':module_Base')
 }

@@ -99,7 +99,7 @@ dependencies {
     api librarys["immersionbar"]
     api librarys["picker_view"]
     api librarys["matisse"]
-    api librarys["zxing-lite"]
+//    api librarys["zxing-lite"]
     api librarys["eventbus"]
 
 }

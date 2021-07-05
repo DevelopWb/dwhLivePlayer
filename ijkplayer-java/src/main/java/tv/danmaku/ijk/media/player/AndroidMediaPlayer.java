@@ -351,7 +351,7 @@ public class AndroidMediaPlayer extends AbstractMediaPlayer {
         mInternalMediaPlayer.setOnTimedTextListener(mInternalListenerAdapter);
     }
 
-    private class AndroidMediaPlayerListenerHolder implements
+    public class AndroidMediaPlayerListenerHolder implements
             MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener,
             MediaPlayer.OnBufferingUpdateListener,
             MediaPlayer.OnSeekCompleteListener,

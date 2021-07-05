@@ -24,23 +24,14 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="EasyPlayer Pro"
                     android:gravity="center"
+                    android:text="管理端"
                     android:textColor="#ffffff"
                     android:textSize="18sp"
                     android:layout_centerHorizontal="true"
                     android:layout_alignParentBottom="true"
                     android:layout_marginBottom="12dp"/>
 
-                <ImageButton
-                    android:id="@+id/toolbar_about"
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:src="@drawable/new_version1"
-                    style="@style/Base.Widget.AppCompat.ActionButton"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginBottom="0dp"/>
 
             </RelativeLayout>
 
