@@ -114,4 +114,5 @@ dependencies {
 
     testImplementation 'junit:junit:4.12'
     implementation project(':ijkplayer-java')
+    implementation project(path: ':module_Base')
 }

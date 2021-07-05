@@ -28,7 +28,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.signature.StringSignature;
 
 import org.easydarwin.easyplayer.bean.VedioAddrBean;
 import org.easydarwin.easyplayer.data.VideoSource;
@@ -36,7 +35,6 @@ import org.easydarwin.easyplayer.databinding.ActivityPlayListBinding;
 import org.easydarwin.easyplayer.databinding.VideoSourceItemBinding;
 import org.easydarwin.easyplayer.util.FileUtil;
 import org.easydarwin.easyplayer.util.SPUtil;
-import org.easydarwin.easyplayer.views.ProVideoView;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -79,24 +77,19 @@ public class PlayListActivity extends AppCompatActivity implements View.OnClickL
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_play_list);
 
         setSupportActionBar(mBinding.toolbar);
-        notifyAboutColorChange();
 
         // 添加默认地址
-        mCursor = TheApp.sDB.query(VideoSource.TABLE_NAME, null, null, null, null, null, null);
+        mCursor = MyApp.sDB.query(VideoSource.TABLE_NAME, null, null, null, null, null, null);
         if (!mCursor.moveToFirst()) {
             List<String> urls = new ArrayList<>();
-            urls.add("rtsp://184.72.239.149/vod/mp4://BigBuckBunny_175k.mov");
-            urls.add("rtmp://live.hkstv.hk.lxdns.com/live/hks2");
-            urls.add("http://www.easydarwin.org/public/video/3/video.m3u8");
-            urls.add("http://m4.pptvyun.com/pvod/e11a0/ijblO6coKRX6a8NEQgg8LDZcqPY/eyJkbCI6MTUxNjYyNTM3NSwiZXMiOjYwNDgwMCwiaWQiOiIwYTJkbnEtWG82S2VvcTZMNEsyZG9hZmhvNkNjbTY2WXB3IiwidiI6IjEuMCJ9/0a2dnq-Xo6Keoq6L4K2doafho6Ccm66Ypw.mp4");
 
             for (String url : urls) {
                 ContentValues cv = new ContentValues();
                 cv.put(VideoSource.URL, url);
-                TheApp.sDB.insert(VideoSource.TABLE_NAME, null, cv);
+                MyApp.sDB.insert(VideoSource.TABLE_NAME, null, cv);
 
                 mCursor.close();
-                mCursor = TheApp.sDB.query(VideoSource.TABLE_NAME, null, null, null, null, null, null);
+                mCursor = MyApp.sDB.query(VideoSource.TABLE_NAME, null, null, null, null, null, null);
             }
 
             SPUtil.setMediaCodec(this, true);
@@ -118,30 +111,30 @@ public class PlayListActivity extends AppCompatActivity implements View.OnClickL
                 mCursor.moveToPosition(position);
                 String name = mCursor.getString(mCursor.getColumnIndex(VideoSource.NAME));
                 String url = mCursor.getString(mCursor.getColumnIndex(VideoSource.URL));
-
-                if (!TextUtils.isEmpty(name)) {
-                    plvh.mTextView.setText(name);
-                } else {
-                    plvh.mTextView.setText(url);
+                plvh.mDevNameTv.setText(name);
+                if (url.length()>8) {
+                    String  ip = url.substring(7,url.lastIndexOf(":"));
+                    String  regCode = url.substring(url.lastIndexOf("/")+1,url.lastIndexOf("."));
+                    //                    plvh.mDevUrlTv.setText(ip);
+                    plvh.mDevRegTv.setText(regCode);
                 }
 
                 File file = FileUtil.getSnapshotFile(url);
 
                 Glide.with(PlayListActivity.this)
                         .load(file)
-                        .signature(new StringSignature(UUID.randomUUID().toString()))
-                        .placeholder(R.drawable.placeholder)
+                        .placeholder(R.mipmap.dev_icon)
                         .centerCrop()
                         .into(plvh.mImageView);
 
                 int audienceNumber = mCursor.getInt(mCursor.getColumnIndex(VideoSource.AUDIENCE_NUMBER));
 
-                if (audienceNumber > 0) {
-                    plvh.mAudienceNumber.setText(String.format("当前观看人数:%d", audienceNumber));
-                    plvh.mAudienceNumber.setVisibility(View.VISIBLE);
-                } else {
-                    plvh.mAudienceNumber.setVisibility(View.GONE);
-                }
+//                if (audienceNumber > 0) {
+//                    plvh.mAudienceNumber.setText(String.format("当前观看人数:%d", audienceNumber));
+//                    plvh.mAudienceNumber.setVisibility(View.VISIBLE);
+//                } else {
+//                    plvh.mAudienceNumber.setVisibility(View.GONE);
+//                }
             }
 
             @Override
@@ -177,7 +170,12 @@ public class PlayListActivity extends AppCompatActivity implements View.OnClickL
                 displayDialog(-1);
             }
         });
-
+        mBinding.toolbarAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivityForResult(new Intent(PlayListActivity.this, AddAdressActivity.class), REQUEST_ADD_DEVICE);
+            }
+        });
     }
 
     @Override
@@ -237,9 +235,9 @@ public class PlayListActivity extends AppCompatActivity implements View.OnClickL
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
                                         mCursor.moveToPosition(pos);
-                                        TheApp.sDB.delete(VideoSource.TABLE_NAME, VideoSource._ID + "=?", new String[]{String.valueOf(mCursor.getInt(mCursor.getColumnIndex(VideoSource._ID)))});
+                                        MyApp.sDB.delete(VideoSource.TABLE_NAME, VideoSource._ID + "=?", new String[]{String.valueOf(mCursor.getInt(mCursor.getColumnIndex(VideoSource._ID)))});
                                         mCursor.close();
-                                        mCursor = TheApp.sDB.query(VideoSource.TABLE_NAME, null, null, null, null, null, null);
+                                        mCursor = MyApp.sDB.query(VideoSource.TABLE_NAME, null, null, null, null, null, null);
                                         mRecyclerView.getAdapter().notifyItemRemoved(pos);
                                     }
                                 })
@@ -317,16 +315,16 @@ public class PlayListActivity extends AppCompatActivity implements View.OnClickL
 
                         if (pos > -1) {
                             final int _id = mCursor.getInt(mCursor.getColumnIndex(VideoSource._ID));
-                            TheApp.sDB.update(VideoSource.TABLE_NAME, cv, VideoSource._ID + "=?", new String[]{String.valueOf(_id)});
+                            MyApp.sDB.update(VideoSource.TABLE_NAME, cv, VideoSource._ID + "=?", new String[]{String.valueOf(_id)});
 
                             mCursor.close();
-                            mCursor = TheApp.sDB.query(VideoSource.TABLE_NAME, null, null, null, null, null, null);
+                            mCursor = MyApp.sDB.query(VideoSource.TABLE_NAME, null, null, null, null, null, null);
                             mRecyclerView.getAdapter().notifyItemChanged(pos);
                         } else {
-                            TheApp.sDB.insert(VideoSource.TABLE_NAME, null, cv);
+                            MyApp.sDB.insert(VideoSource.TABLE_NAME, null, cv);
 
                             mCursor.close();
-                            mCursor = TheApp.sDB.query(VideoSource.TABLE_NAME, null, null, null, null, null, null);
+                            mCursor = MyApp.sDB.query(VideoSource.TABLE_NAME, null, null, null, null, null, null);
                             mRecyclerView.getAdapter().notifyItemInserted(mCursor.getCount() - 1);
                         }
                     }
@@ -351,24 +349,6 @@ public class PlayListActivity extends AppCompatActivity implements View.OnClickL
         overridePendingTransition(R.anim.slide_bottom_in, R.anim.slide_top_out);
     }
 
-    /*
-     * 显示key有限期
-     * */
-    private void notifyAboutColorChange() {
-        //// !!!! important to set KEY  !!!!
-        ProVideoView.setKey(BuildConfig.PLAYER_KEY);
-        long activeDays = ProVideoView.getActiveDays(this,BuildConfig.PLAYER_KEY);
-
-        ImageView iv = findViewById(R.id.toolbar_about);
-
-        if (activeDays >= 9999) {
-            iv.setImageResource(R.drawable.new_version1);
-        } else if (activeDays > 0) {
-            iv.setImageResource(R.drawable.new_version2);
-        } else {
-            iv.setImageResource(R.drawable.new_version3);
-        }
-    }
 
     public void fileList(View view) {
         Intent i = new Intent(this, MediaFilesActivity.class);
@@ -379,15 +359,19 @@ public class PlayListActivity extends AppCompatActivity implements View.OnClickL
      * 视频源的item
      * */
     class PlayListViewHolder extends RecyclerView.ViewHolder {
-        private final TextView mTextView;
-        private final TextView mAudienceNumber;
+        private final TextView mDevNameTv;
+        //        private final TextView mDevUrlTv;
+        private final TextView mDevRegTv;
+        //        private final TextView mAudienceNumber;
         private final ImageView mImageView;
 
         public PlayListViewHolder(VideoSourceItemBinding binding) {
             super(binding.getRoot());
 
-            mTextView = binding.videoSourceItemName;
-            mAudienceNumber = binding.videoSourceItemAudienceNumber;
+            mDevNameTv = binding.devNameValueTv;
+            //            mDevUrlTv = binding.devUrlValueTv;
+            mDevRegTv = binding.devRegValueTv;
+            //            mAudienceNumber = binding.videoSourceItemAudienceNumber;
             mImageView = binding.videoSourceItemThumb;
 
             itemView.setOnClickListener(PlayListActivity.this);
@@ -407,25 +391,17 @@ public class PlayListActivity extends AppCompatActivity implements View.OnClickL
             }
         } else if (requestCode == REQUEST_ADD_DEVICE) {
             if (data != null) {
-//                VedioAddrBean bean = data.getParcelableExtra(DEVICE_INFO);
-//                StringBuilder  sb = new StringBuilder();
-//                sb.append("rtsp://").append(bean.getIp()).append(":554/").append(bean.getRegCode()).append(".sdp");
-//                ContentValues cv = new ContentValues();
-//                cv.put(VideoSource.URL, sb.toString());
-//                cv.put(VideoSource.NAME, bean.getName());
-//                if ("TCP".equals(bean.getProtocal())) {
-//                    cv.put(VideoSource.TRANSPORT_MODE, VideoSource.TRANSPORT_MODE_TCP);
-//                } else {
-//                    cv.put(VideoSource.TRANSPORT_MODE, VideoSource.TRANSPORT_MODE_UDP);
-//                }
-//
-//                cv.put(VideoSource.SEND_OPTION, bean.isSendPakage() ? VideoSource.SEND_OPTION_TRUE : VideoSource.SEND_OPTION_FALSE);
-//
-//                MyApp.sDB.insert(VideoSource.TABLE_NAME, null, cv);
-//
-//                mCursor.close();
-//                mCursor = MyApp.sDB.query(VideoSource.TABLE_NAME, null, null, null, null, null, null);
-//                mRecyclerView.getAdapter().notifyItemInserted(mCursor.getCount() - 1);
+                VedioAddrBean bean = data.getParcelableExtra(DEVICE_INFO);
+                StringBuilder  sb = new StringBuilder();
+                sb.append("rtsp://").append(bean.getIp()).append(":554/").append(bean.getRegCode()).append(".sdp");
+                ContentValues cv = new ContentValues();
+                cv.put(VideoSource.URL, sb.toString());
+                cv.put(VideoSource.NAME, bean.getName());
+                MyApp.sDB.insert(VideoSource.TABLE_NAME, null, cv);
+
+                mCursor.close();
+                mCursor = MyApp.sDB.query(VideoSource.TABLE_NAME, null, null, null, null, null, null);
+                mRecyclerView.getAdapter().notifyItemInserted(mCursor.getCount() - 1);
             }
         }else {
 //            mRecyclerView.getAdapter().notifyItemChanged(mPos);
