@@ -1,16 +1,14 @@
 apply plugin: 'com.android.library'
-
+def configs = rootProject.ext.android
 android {
-    compileSdkVersion 26
+    compileSdkVersion configs.compileSdkVersion
     lintOptions {
         abortOnError false
     }
     defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 26
+        minSdkVersion configs.minSdkVersion
+        targetSdkVersion configs.targetSdkVersion
         consumerProguardFiles 'proguard-rules.pro'
-        versionCode 38
-        versionName "1.1.17.1124"
     }
     buildTypes {
         release {

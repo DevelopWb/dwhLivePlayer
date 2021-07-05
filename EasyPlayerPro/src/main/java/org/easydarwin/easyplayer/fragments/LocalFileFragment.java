@@ -4,9 +4,11 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.FileProvider;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -142,8 +144,14 @@ public class LocalFileFragment extends Fragment implements CompoundButton.OnChec
         }
 
         File f = new File(path);
-        Uri uri = Uri.fromFile(f);
-
+        Uri uri = null;
+        if (Build.VERSION.SDK_INT >= 24) {//7.0 Android N
+            //com.xxx.xxx.fileprovider为上述manifest中provider所配置相同
+            uri = FileProvider.getUriForFile(getContext(), "org.easydarwin.easyplayer.fileProvider", f);
+            // 读取权限，安装完毕以后，系统会自动收回权限，该过程没有用户交互
+        } else {//7.0以下
+            uri = Uri.fromFile(f);
+        }
         if (path.endsWith(".jpg")) {
             try {
                 Intent intent = new Intent();

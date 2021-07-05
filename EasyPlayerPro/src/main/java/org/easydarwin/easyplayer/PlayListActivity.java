@@ -35,6 +35,7 @@ import org.easydarwin.easyplayer.databinding.ActivityPlayListBinding;
 import org.easydarwin.easyplayer.databinding.VideoSourceItemBinding;
 import org.easydarwin.easyplayer.util.FileUtil;
 import org.easydarwin.easyplayer.util.SPUtil;
+import org.easydarwin.easyplayer.views.ProVideoView;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -62,12 +63,11 @@ public class PlayListActivity extends AppCompatActivity implements View.OnClickL
 
     private Cursor mCursor;
 
-    private long mExitTime;//声明一个long类型变量：用于存放上一点击“返回键”的时刻
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        ProVideoView.setKey(BuildConfig.PLAYER_KEY);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             View decorView = getWindow().getDecorView();
             decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
@@ -251,18 +251,6 @@ public class PlayListActivity extends AppCompatActivity implements View.OnClickL
         return true;
     }
 
-    @Override
-    public void onBackPressed() {
-        //与上次点击返回键时刻作差
-        if ((System.currentTimeMillis() - mExitTime) > 2000) {
-            //大于2000ms则认为是误操作，使用Toast进行提示
-            Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
-            //并记录下本次点击“返回键”的时刻，以便下次进行判断
-            mExitTime = System.currentTimeMillis();
-        } else {
-            super.onBackPressed();
-        }
-    }
 
     private void displayDialog(final int pos) {
         String url = "";
