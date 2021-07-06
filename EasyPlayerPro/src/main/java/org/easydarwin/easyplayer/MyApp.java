@@ -3,6 +3,9 @@ package org.easydarwin.easyplayer;
 import android.app.Application;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.basenetlib.util.NetWorkUtil;
+import com.orhanobut.hawk.Hawk;
+
 import org.easydarwin.easyplayer.data.EasyDBHelper;
 
 /**
@@ -18,7 +21,8 @@ public class MyApp extends Application {
         super.onCreate();
 
         sDB = new EasyDBHelper(this).getWritableDatabase();
-
+        Hawk.init(this).build();
+        NetWorkUtil.initContext(this);
     }
 
 }

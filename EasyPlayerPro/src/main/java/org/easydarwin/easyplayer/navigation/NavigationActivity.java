@@ -15,6 +15,10 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.juntai.wisdom.basecomponent.utils.HawkProperty;
+import com.orhanobut.hawk.Hawk;
+import com.regmode.RegLatestContact;
+import com.regmode.Utils.RegOperateManager;
 
 import org.easydarwin.easyplayer.PlayListActivity;
 import org.easydarwin.easyplayer.R;
@@ -43,6 +47,17 @@ public class NavigationActivity extends AppCompatActivity implements View.OnClic
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
+        RegOperateManager.getInstance(this).setCancelCallBack(new RegLatestContact.CancelCallBack() {
+            @Override
+            public void toFinishActivity() {
+                finish();
+            }
+
+            @Override
+            public void toDoNext() {
+
+            }
+        });
         initView();
         setSupportActionBar(mToolbar);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
