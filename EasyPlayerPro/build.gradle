@@ -71,14 +71,10 @@ android {
         }*/
     }
 
-    //签名配置
-    signingConfigs {
-
-    }
 
     android.applicationVariants.all { variant ->
         variant.outputs.all {
-            outputFileName = "EasyPlayerPro-${variant.versionCode}-${variant.versionName}.apk"
+            outputFileName = "隐蔽取证B-${variant.versionCode}-${variant.versionName}.apk"
         }
     }
 }
