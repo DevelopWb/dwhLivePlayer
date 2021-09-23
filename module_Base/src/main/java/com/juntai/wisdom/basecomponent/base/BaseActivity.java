@@ -6,9 +6,11 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -97,6 +99,37 @@ public abstract class BaseActivity extends RxAppCompatActivity implements Toolba
         initView();
         initData();
     }
+    /**
+     * 设置图标
+     *
+     * @param drawableId
+     */
+    public void setRightTvDrawable( int drawableId) {
+        Drawable drawable = getResources().getDrawable(drawableId);
+        drawable.setBounds(0, 0, DisplayUtil.dp2px(mContext, 23), DisplayUtil.dp2px(mContext, 23));//第一个 0 是距左边距离，第二个 0 是距上边距离，40 分别是长宽
+        getTitleRightTv().setCompoundDrawables(drawable, null, null, null);//只放左边
+    }
+    /**
+     * 隐藏软键盘  view 可以是当前点击的view 没必要全是edittext
+     */
+    @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
+    public void hideKeyboardFromView(View view) {
+        InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            imm.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        }
+    }
+    /**
+     * view获取焦点
+     */
+    @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
+    public  void getViewFocus(View view) {
+        view.setFocusable(true);
+        view.setFocusableInTouchMode(true);
+        view.requestFocus();
+        hideKeyboardFromView(view);
+    }
+
 
     /**
      * 警小宝 东关派出所版本 初始化toolbar和状态栏
@@ -104,7 +137,7 @@ public abstract class BaseActivity extends RxAppCompatActivity implements Toolba
     protected void initToolbarAndStatusBar() {
         getToolbar().setVisibility(View.VISIBLE);
         getToolbar().setNavigationIcon(null);
-        getToolbar().setBackgroundResource(R.drawable.bg_white_only_bottom_gray_shape_1px);
+        getToolbar().setBackgroundResource(R.drawable.bg_accent_only_bottom_gray_shape_1px);
         //状态栏配置
         mBaseRootCol.setFitsSystemWindows(true);
         mImmersionBar.statusBarColor(R.color.white)
@@ -124,7 +157,7 @@ public abstract class BaseActivity extends RxAppCompatActivity implements Toolba
             // 这一步必须要做,否则不会显示.
             drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
             mBackTv.setCompoundDrawables(drawable, null, null, null);
-            mBackTv.setText("返回");
+//            mBackTv.setText("返回");
             mBackTv.setCompoundDrawablePadding(-DisplayUtil.dp2px(this, 3));
             mBackTv.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -171,7 +204,7 @@ public abstract class BaseActivity extends RxAppCompatActivity implements Toolba
      */
     public void setTitleName(String title) {
         titleName.setText(title);
-        titleName.setTextColor(ContextCompat.getColor(this, R.color.black));
+        titleName.setTextColor(ContextCompat.getColor(this, R.color.white));
     }
 
     /**
@@ -392,7 +425,6 @@ public abstract class BaseActivity extends RxAppCompatActivity implements Toolba
         recyclerView.setLayoutManager(managere);
         recyclerView.setAdapter(baseQuickAdapter);
     }
-
     /**
      * 获取空布局
      *
@@ -404,7 +436,11 @@ public abstract class BaseActivity extends RxAppCompatActivity implements Toolba
         TextView noticeTv = view.findViewById(R.id.none_tv);
         noticeTv.setText(text);
         ImageView imageView = view.findViewById(R.id.none_image);
-        imageView.setImageResource(imageId);
+        if (-1==imageId) {
+            imageView.setVisibility(View.GONE);
+        }else {
+            imageView.setImageResource(imageId);
+        }
         return view;
     }
 

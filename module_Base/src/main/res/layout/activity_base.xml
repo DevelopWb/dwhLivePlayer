@@ -41,7 +41,6 @@
                 android:layout_marginRight="15dp"
                 android:layout_gravity="right"
                 android:textColor="@color/blue"
-                android:text="@string/app_name"
                 android:visibility="gone"/>
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>

@@ -78,23 +78,23 @@ public class PlayListActivity extends AppCompatActivity implements View.OnClickL
 
         setSupportActionBar(mBinding.toolbar);
 
-        // 添加默认地址
-        mCursor = MyApp.sDB.query(VideoSource.TABLE_NAME, null, null, null, null, null, null);
-        if (!mCursor.moveToFirst()) {
-            List<String> urls = new ArrayList<>();
-
-            for (String url : urls) {
-                ContentValues cv = new ContentValues();
-                cv.put(VideoSource.URL, url);
-                MyApp.sDB.insert(VideoSource.TABLE_NAME, null, cv);
-
-                mCursor.close();
-                mCursor = MyApp.sDB.query(VideoSource.TABLE_NAME, null, null, null, null, null, null);
-            }
-
-            SPUtil.setMediaCodec(this, true);
-            SPUtil.setUDPMode(this, false);
-        }
+//        // 添加默认地址
+//        mCursor = MyApp.sDB.query(VideoSource.TABLE_NAME, null, null, null, null, null, null);
+//        if (!mCursor.moveToFirst()) {
+//            List<String> urls = new ArrayList<>();
+//
+//            for (String url : urls) {
+//                ContentValues cv = new ContentValues();
+//                cv.put(VideoSource.URL, url);
+//                MyApp.sDB.insert(VideoSource.TABLE_NAME, null, cv);
+//
+//                mCursor.close();
+//                mCursor = MyApp.sDB.query(VideoSource.TABLE_NAME, null, null, null, null, null, null);
+//            }
+//
+//            SPUtil.setMediaCodec(this, true);
+//            SPUtil.setUDPMode(this, false);
+//        }
 
         mRecyclerView = mBinding.recycler;
         mRecyclerView.setHasFixedSize(true);
@@ -234,11 +234,11 @@ public class PlayListActivity extends AppCompatActivity implements View.OnClickL
                                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
-                                        mCursor.moveToPosition(pos);
-                                        MyApp.sDB.delete(VideoSource.TABLE_NAME, VideoSource._ID + "=?", new String[]{String.valueOf(mCursor.getInt(mCursor.getColumnIndex(VideoSource._ID)))});
-                                        mCursor.close();
-                                        mCursor = MyApp.sDB.query(VideoSource.TABLE_NAME, null, null, null, null, null, null);
-                                        mRecyclerView.getAdapter().notifyItemRemoved(pos);
+//                                        mCursor.moveToPosition(pos);
+//                                        MyApp.sDB.delete(VideoSource.TABLE_NAME, VideoSource._ID + "=?", new String[]{String.valueOf(mCursor.getInt(mCursor.getColumnIndex(VideoSource._ID)))});
+//                                        mCursor.close();
+//                                        mCursor = MyApp.sDB.query(VideoSource.TABLE_NAME, null, null, null, null, null, null);
+//                                        mRecyclerView.getAdapter().notifyItemRemoved(pos);
                                     }
                                 })
                                 .setNegativeButton("取消", null)
@@ -301,20 +301,20 @@ public class PlayListActivity extends AppCompatActivity implements View.OnClickL
                         ContentValues cv = new ContentValues();
                         cv.put(VideoSource.URL, url);
 
-                        if (pos > -1) {
-                            final int _id = mCursor.getInt(mCursor.getColumnIndex(VideoSource._ID));
-                            MyApp.sDB.update(VideoSource.TABLE_NAME, cv, VideoSource._ID + "=?", new String[]{String.valueOf(_id)});
-
-                            mCursor.close();
-                            mCursor = MyApp.sDB.query(VideoSource.TABLE_NAME, null, null, null, null, null, null);
-                            mRecyclerView.getAdapter().notifyItemChanged(pos);
-                        } else {
-                            MyApp.sDB.insert(VideoSource.TABLE_NAME, null, cv);
-
-                            mCursor.close();
-                            mCursor = MyApp.sDB.query(VideoSource.TABLE_NAME, null, null, null, null, null, null);
-                            mRecyclerView.getAdapter().notifyItemInserted(mCursor.getCount() - 1);
-                        }
+//                        if (pos > -1) {
+//                            final int _id = mCursor.getInt(mCursor.getColumnIndex(VideoSource._ID));
+//                            MyApp.sDB.update(VideoSource.TABLE_NAME, cv, VideoSource._ID + "=?", new String[]{String.valueOf(_id)});
+//
+//                            mCursor.close();
+//                            mCursor = MyApp.sDB.query(VideoSource.TABLE_NAME, null, null, null, null, null, null);
+//                            mRecyclerView.getAdapter().notifyItemChanged(pos);
+//                        } else {
+//                            MyApp.sDB.insert(VideoSource.TABLE_NAME, null, cv);
+//
+//                            mCursor.close();
+//                            mCursor = MyApp.sDB.query(VideoSource.TABLE_NAME, null, null, null, null, null, null);
+//                            mRecyclerView.getAdapter().notifyItemInserted(mCursor.getCount() - 1);
+//                        }
                     }
                 })
                 .setNegativeButton("取消", null)
@@ -372,28 +372,28 @@ public class PlayListActivity extends AppCompatActivity implements View.OnClickL
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == REQUEST_SCAN_TEXT_URL) {
-            if (resultCode == RESULT_OK) {
-                String url = data.getStringExtra("text");
-                edit.setText(url);
-            }
-        } else if (requestCode == REQUEST_ADD_DEVICE) {
-            if (data != null) {
-                VedioAddrBean bean = data.getParcelableExtra(DEVICE_INFO);
-                StringBuilder  sb = new StringBuilder();
-                sb.append("rtsp://").append(bean.getIp()).append(":554/").append(bean.getRegCode()).append(".sdp");
-                ContentValues cv = new ContentValues();
-                cv.put(VideoSource.URL, sb.toString());
-                cv.put(VideoSource.NAME, bean.getName());
-                MyApp.sDB.insert(VideoSource.TABLE_NAME, null, cv);
-
-                mCursor.close();
-                mCursor = MyApp.sDB.query(VideoSource.TABLE_NAME, null, null, null, null, null, null);
-                mRecyclerView.getAdapter().notifyItemInserted(mCursor.getCount() - 1);
-            }
-        }else {
-//            mRecyclerView.getAdapter().notifyItemChanged(mPos);
-            mRecyclerView.getAdapter().notifyDataSetChanged();
-        }
+//        if (requestCode == REQUEST_SCAN_TEXT_URL) {
+//            if (resultCode == RESULT_OK) {
+//                String url = data.getStringExtra("text");
+//                edit.setText(url);
+//            }
+//        } else if (requestCode == REQUEST_ADD_DEVICE) {
+//            if (data != null) {
+//                VedioAddrBean bean = data.getParcelableExtra(DEVICE_INFO);
+//                StringBuilder  sb = new StringBuilder();
+//                sb.append("rtsp://").append(bean.getIp()).append(":554/").append(bean.getRegCode()).append(".sdp");
+//                ContentValues cv = new ContentValues();
+//                cv.put(VideoSource.URL, sb.toString());
+//                cv.put(VideoSource.NAME, bean.getName());
+//                MyApp.sDB.insert(VideoSource.TABLE_NAME, null, cv);
+//
+//                mCursor.close();
+//                mCursor = MyApp.sDB.query(VideoSource.TABLE_NAME, null, null, null, null, null, null);
+//                mRecyclerView.getAdapter().notifyItemInserted(mCursor.getCount() - 1);
+//            }
+//        }else {
+////            mRecyclerView.getAdapter().notifyItemChanged(mPos);
+//            mRecyclerView.getAdapter().notifyDataSetChanged();
+//        }
     }
 }

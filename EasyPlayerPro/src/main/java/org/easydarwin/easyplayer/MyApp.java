@@ -1,26 +1,31 @@
 package org.easydarwin.easyplayer;
 
-import android.app.Application;
+import android.app.Activity;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.basenetlib.util.NetWorkUtil;
+import com.juntai.wisdom.basecomponent.app.BaseApplication;
 import com.orhanobut.hawk.Hawk;
-
-import org.easydarwin.easyplayer.data.EasyDBHelper;
 
 /**
  * Created by afd on 8/13/16.
  */
-public class MyApp extends Application {
+public class MyApp extends BaseApplication {
 
-    public static final String DEFAULT_SERVER_IP = "cloud.easydarwin.org";
-    public static SQLiteDatabase sDB;
+
+    @Override
+    public void appBackground(boolean isBackground, Activity activity) {
+
+    }
+
+    @Override
+    public String getTinkerId() {
+        return null;
+    }
 
     @Override
     public void onCreate() {
         super.onCreate();
-
-        sDB = new EasyDBHelper(this).getWritableDatabase();
         Hawk.init(this).build();
         NetWorkUtil.initContext(this);
     }
