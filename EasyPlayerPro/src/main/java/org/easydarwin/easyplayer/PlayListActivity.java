@@ -78,23 +78,6 @@ public class PlayListActivity extends AppCompatActivity implements View.OnClickL
 
         setSupportActionBar(mBinding.toolbar);
 
-//        // 添加默认地址
-//        mCursor = MyApp.sDB.query(VideoSource.TABLE_NAME, null, null, null, null, null, null);
-//        if (!mCursor.moveToFirst()) {
-//            List<String> urls = new ArrayList<>();
-//
-//            for (String url : urls) {
-//                ContentValues cv = new ContentValues();
-//                cv.put(VideoSource.URL, url);
-//                MyApp.sDB.insert(VideoSource.TABLE_NAME, null, cv);
-//
-//                mCursor.close();
-//                mCursor = MyApp.sDB.query(VideoSource.TABLE_NAME, null, null, null, null, null, null);
-//            }
-//
-//            SPUtil.setMediaCodec(this, true);
-//            SPUtil.setUDPMode(this, false);
-//        }
 
         mRecyclerView = mBinding.recycler;
         mRecyclerView.setHasFixedSize(true);
@@ -129,12 +112,6 @@ public class PlayListActivity extends AppCompatActivity implements View.OnClickL
 
                 int audienceNumber = mCursor.getInt(mCursor.getColumnIndex(VideoSource.AUDIENCE_NUMBER));
 
-//                if (audienceNumber > 0) {
-//                    plvh.mAudienceNumber.setText(String.format("当前观看人数:%d", audienceNumber));
-//                    plvh.mAudienceNumber.setVisibility(View.VISIBLE);
-//                } else {
-//                    plvh.mAudienceNumber.setVisibility(View.GONE);
-//                }
             }
 
             @Override
@@ -142,13 +119,6 @@ public class PlayListActivity extends AppCompatActivity implements View.OnClickL
                 return mCursor.getCount();
             }
         });
-
-//        // 如果当前进程挂起，则进入启动页
-//        if (savedInstanceState == null) {
-//            if (!getIntent().getBooleanExtra(EXTRA_BOOLEAN_SELECT_ITEM_TO_PLAY, false)) {
-//                startActivity(new Intent(this, SplashActivity.class));
-//            }
-//        }
 
         mBinding.pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -160,7 +130,7 @@ public class PlayListActivity extends AppCompatActivity implements View.OnClickL
         mBinding.toolbarSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(PlayListActivity.this, SettingsActivity.class));
+//                startActivity(new Intent(PlayListActivity.this, SettingsActivity.class));
             }
         });
 
@@ -234,11 +204,6 @@ public class PlayListActivity extends AppCompatActivity implements View.OnClickL
                                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
-//                                        mCursor.moveToPosition(pos);
-//                                        MyApp.sDB.delete(VideoSource.TABLE_NAME, VideoSource._ID + "=?", new String[]{String.valueOf(mCursor.getInt(mCursor.getColumnIndex(VideoSource._ID)))});
-//                                        mCursor.close();
-//                                        mCursor = MyApp.sDB.query(VideoSource.TABLE_NAME, null, null, null, null, null, null);
-//                                        mRecyclerView.getAdapter().notifyItemRemoved(pos);
                                     }
                                 })
                                 .setNegativeButton("取消", null)
@@ -379,9 +344,9 @@ public class PlayListActivity extends AppCompatActivity implements View.OnClickL
 //            }
 //        } else if (requestCode == REQUEST_ADD_DEVICE) {
 //            if (data != null) {
-//                VedioAddrBean bean = data.getParcelableExtra(DEVICE_INFO);
-//                StringBuilder  sb = new StringBuilder();
-//                sb.append("rtsp://").append(bean.getIp()).append(":554/").append(bean.getRegCode()).append(".sdp");
+                VedioAddrBean bean = data.getParcelableExtra(DEVICE_INFO);
+                StringBuilder  sb = new StringBuilder();
+                sb.append("rtsp://").append(bean.getIp()).append(":554/").append(bean.getRegCode()).append(".sdp");
 //                ContentValues cv = new ContentValues();
 //                cv.put(VideoSource.URL, sb.toString());
 //                cv.put(VideoSource.NAME, bean.getName());

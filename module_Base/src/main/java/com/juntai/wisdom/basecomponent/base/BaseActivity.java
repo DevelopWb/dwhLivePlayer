@@ -140,7 +140,7 @@ public abstract class BaseActivity extends RxAppCompatActivity implements Toolba
         getToolbar().setBackgroundResource(R.drawable.bg_accent_only_bottom_gray_shape_1px);
         //状态栏配置
         mBaseRootCol.setFitsSystemWindows(true);
-        mImmersionBar.statusBarColor(R.color.white)
+        mImmersionBar.statusBarColor(R.color.colorAccent)
                 .statusBarDarkFont(true)
                 .init();
     }

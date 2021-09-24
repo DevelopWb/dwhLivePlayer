@@ -1,5 +1,7 @@
 package org.easydarwin.easyplayer.main;
 
+import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -9,9 +11,12 @@ import android.widget.LinearLayout;
 
 import com.juntai.wisdom.basecomponent.base.BaseMvpActivity;
 
+import org.easydarwin.easyplayer.AddAdressActivity;
+import org.easydarwin.easyplayer.PlayListActivity;
 import org.easydarwin.easyplayer.R;
 import org.easydarwin.easyplayer.base.customview.CustomViewPager;
 import org.easydarwin.easyplayer.base.customview.MainPagerAdapter;
+import org.easydarwin.easyplayer.bean.VedioAddrBean;
 import org.easydarwin.easyplayer.main.fragments.filerecord.FileRecordFragment;
 import org.easydarwin.easyplayer.main.fragments.HomePageFragment;
 import org.easydarwin.easyplayer.main.fragments.MyCenterFragment;
@@ -46,7 +51,17 @@ public class MainActivity extends BaseMvpActivity<MainPagePresent> implements Vi
         setTitleName("聊天");
         setRightTvDrawable(R.drawable.new_fast_white);
         mImmersionBar.reset().statusBarDarkFont(false).statusBarColor(R.color.colorAccent).init();
+        getTitleRightTv().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //添加dev
+                startActivityForResult(new Intent(mContext, AddAdressActivity.class), AddAdressActivity.REQUEST_ADD_DEVICE);
+
+            }
+        });
     }
+
+
 
     @Override
     public void initData() {
@@ -145,5 +160,18 @@ public class MainActivity extends BaseMvpActivity<MainPagePresent> implements Vi
     @Override
     protected MainPagePresent createPresenter() {
         return new MainPagePresent();
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode== AddAdressActivity.REQUEST_ADD_DEVICE) {
+            if (data != null) {
+                VedioAddrBean bean = data.getParcelableExtra(AddAdressActivity.DEVICE_INFO);
+                StringBuilder  sb = new StringBuilder();
+                sb.append("rtsp://").append(bean.getIp()).append(":554/").append(bean.getRegCode()).append(".sdp");
+            }
+
+        }
     }
 }
