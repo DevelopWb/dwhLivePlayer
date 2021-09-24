@@ -1,4 +1,4 @@
-package org.easydarwin.easyplayer.data;
+package org.easydarwin.easyplayer.bean;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;

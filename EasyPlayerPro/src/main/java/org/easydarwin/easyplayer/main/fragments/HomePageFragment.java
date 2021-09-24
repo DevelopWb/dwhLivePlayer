@@ -6,11 +6,16 @@ import android.view.View;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.juntai.wisdom.basecomponent.base.BaseMvpFragment;
 import com.juntai.wisdom.basecomponent.utils.ToastUtils;
+import com.orhanobut.hawk.Hawk;
 
 import org.easydarwin.easyplayer.R;
 import org.easydarwin.easyplayer.base.BaseRecyclerviewFragment;
+import org.easydarwin.easyplayer.bean.VideoAddrBean;
 import org.easydarwin.easyplayer.main.MainPageContract;
 import org.easydarwin.easyplayer.main.MainPagePresent;
+import org.easydarwin.easyplayer.util.HawkUtils;
+
+import java.util.List;
 
 
 /**
@@ -30,9 +35,24 @@ public class HomePageFragment extends BaseRecyclerviewFragment<MainPagePresent> 
     protected void initView() {
         super.initView();
         mSmartrefreshlayout.setEnableLoadMore(false);
-        adapter.setNewData(getBaseActivity().getTestData());
+        List<VideoAddrBean>  arrays = Hawk.get(HawkUtils.ALL_DEVS);
+        adapter.setNewData(arrays);
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                VideoAddrBean videoAddrBean = (VideoAddrBean) adapter.getData().get(position);
+                ToastUtils.toast(mContext,videoAddrBean.getUrl());
+            }
+        });
     }
 
+    /**
+     * 添加数据
+     */
+    public void  addAdapterData(VideoAddrBean videoAddrBean){
+        adapter.addData(videoAddrBean);
+        Hawk.put(HawkUtils.ALL_DEVS,adapter.getData());
+    }
     @Override
     protected void freshlayoutOnLoadMore() {
 

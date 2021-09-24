@@ -6,15 +6,42 @@ import android.os.Parcelable;
 /**
  * Author:wang_sir
  * Time:2019/12/26 21:47
- * Description:This is VedioAddrBean
+ * Description:This is VideoAddrBean
  */
-public class VedioAddrBean implements Parcelable {
+public class VideoAddrBean implements Parcelable {
 
     private  String  Name ;
+    private  String  addTime ;
     private  String Ip;
     private  String RegCode;
+    private  String url;
     private  String  Protocal ;
     private  boolean  sendPakage ;
+    private int  urlType ;//0代表rtmp  1代表rtsp
+
+    public String getAddTime() {
+        return addTime == null ? "" : addTime;
+    }
+
+    public int getUrlType() {
+        return urlType;
+    }
+
+    public void setUrlType(int urlType) {
+        this.urlType = urlType;
+    }
+
+    public String getUrl() {
+        return url == null ? "" : url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url == null ? "" : url;
+    }
+
+    public void setAddTime(String addTime) {
+        this.addTime = addTime == null ? "" : addTime;
+    }
 
     public String getName() {
         return Name == null ? "" : Name;
@@ -56,7 +83,6 @@ public class VedioAddrBean implements Parcelable {
         this.sendPakage = sendPakage;
     }
 
-
     @Override
     public int describeContents() {
         return 0;
@@ -65,32 +91,38 @@ public class VedioAddrBean implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.Name);
+        dest.writeString(this.addTime);
         dest.writeString(this.Ip);
         dest.writeString(this.RegCode);
+        dest.writeString(this.url);
         dest.writeString(this.Protocal);
         dest.writeByte(this.sendPakage ? (byte) 1 : (byte) 0);
+        dest.writeInt(this.urlType);
     }
 
-    public VedioAddrBean() {
+    public VideoAddrBean() {
     }
 
-    protected VedioAddrBean(Parcel in) {
+    protected VideoAddrBean(Parcel in) {
         this.Name = in.readString();
+        this.addTime = in.readString();
         this.Ip = in.readString();
         this.RegCode = in.readString();
+        this.url = in.readString();
         this.Protocal = in.readString();
         this.sendPakage = in.readByte() != 0;
+        this.urlType = in.readInt();
     }
 
-    public static final Creator<VedioAddrBean> CREATOR = new Creator<VedioAddrBean>() {
+    public static final Parcelable.Creator<VideoAddrBean> CREATOR = new Parcelable.Creator<VideoAddrBean>() {
         @Override
-        public VedioAddrBean createFromParcel(Parcel source) {
-            return new VedioAddrBean(source);
+        public VideoAddrBean createFromParcel(Parcel source) {
+            return new VideoAddrBean(source);
         }
 
         @Override
-        public VedioAddrBean[] newArray(int size) {
-            return new VedioAddrBean[size];
+        public VideoAddrBean[] newArray(int size) {
+            return new VideoAddrBean[size];
         }
     };
 }

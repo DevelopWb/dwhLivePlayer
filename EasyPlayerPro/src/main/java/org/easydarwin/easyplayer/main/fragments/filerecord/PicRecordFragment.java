@@ -30,7 +30,6 @@ public class PicRecordFragment extends BaseRecyclerviewFragment<MainPagePresent>
     protected void initView() {
         super.initView();
         mSmartrefreshlayout.setEnableLoadMore(false);
-        adapter.setNewData(getBaseActivity().getTestData());
     }
 
     @Override

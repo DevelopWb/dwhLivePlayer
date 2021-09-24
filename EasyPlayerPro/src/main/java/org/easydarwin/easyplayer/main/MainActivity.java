@@ -12,11 +12,10 @@ import android.widget.LinearLayout;
 import com.juntai.wisdom.basecomponent.base.BaseMvpActivity;
 
 import org.easydarwin.easyplayer.AddAdressActivity;
-import org.easydarwin.easyplayer.PlayListActivity;
 import org.easydarwin.easyplayer.R;
 import org.easydarwin.easyplayer.base.customview.CustomViewPager;
 import org.easydarwin.easyplayer.base.customview.MainPagerAdapter;
-import org.easydarwin.easyplayer.bean.VedioAddrBean;
+import org.easydarwin.easyplayer.bean.VideoAddrBean;
 import org.easydarwin.easyplayer.main.fragments.filerecord.FileRecordFragment;
 import org.easydarwin.easyplayer.main.fragments.HomePageFragment;
 import org.easydarwin.easyplayer.main.fragments.MyCenterFragment;
@@ -31,6 +30,7 @@ public class MainActivity extends BaseMvpActivity<MainPagePresent> implements Vi
     private String[] title = new String[]{"聊天", "通讯录", "我的"};
     private int[] tabDrawables = new int[]{R.drawable.home_index, R.drawable.home_index, R.drawable.home_msg};
     private SparseArray<Fragment> mFragments = new SparseArray<>();
+    private HomePageFragment mHomePageFg;
     //
 
 
@@ -55,12 +55,12 @@ public class MainActivity extends BaseMvpActivity<MainPagePresent> implements Vi
             @Override
             public void onClick(View v) {
                 //添加dev
-                startActivityForResult(new Intent(mContext, AddAdressActivity.class), AddAdressActivity.REQUEST_ADD_DEVICE);
+                startActivityForResult(new Intent(mContext, AddAdressActivity.class),
+                        AddAdressActivity.REQUEST_ADD_DEVICE);
 
             }
         });
     }
-
 
 
     @Override
@@ -69,7 +69,8 @@ public class MainActivity extends BaseMvpActivity<MainPagePresent> implements Vi
 
 
     public void initTab() {
-        mFragments.append(0, new HomePageFragment());//
+        mHomePageFg = new HomePageFragment();
+        mFragments.append(0, mHomePageFg);//
         mFragments.append(1, new FileRecordFragment());//
         mFragments.append(2, new MyCenterFragment());//设置
         //
@@ -165,11 +166,12 @@ public class MainActivity extends BaseMvpActivity<MainPagePresent> implements Vi
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (requestCode== AddAdressActivity.REQUEST_ADD_DEVICE) {
+        if (requestCode == AddAdressActivity.REQUEST_ADD_DEVICE) {
             if (data != null) {
-                VedioAddrBean bean = data.getParcelableExtra(AddAdressActivity.DEVICE_INFO);
-                StringBuilder  sb = new StringBuilder();
-                sb.append("rtsp://").append(bean.getIp()).append(":554/").append(bean.getRegCode()).append(".sdp");
+                VideoAddrBean videoAddrBean = data.getParcelableExtra(AddAdressActivity.DEVICE_INFO);
+                mHomePageFg.addAdapterData(videoAddrBean);
+
+
             }
 
         }

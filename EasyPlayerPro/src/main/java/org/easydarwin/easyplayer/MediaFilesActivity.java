@@ -16,7 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import org.easydarwin.easyplayer.databinding.ActivityMediaFilesBinding;
-import org.easydarwin.easyplayer.fragments.LocalFileFragment;
+import org.easydarwin.easyplayer.main.fragments.filerecord.LocalFileFragment;
 
 /**
  * 录像和截图

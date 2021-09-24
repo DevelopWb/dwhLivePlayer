@@ -29,18 +29,14 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
-import org.easydarwin.easyplayer.bean.VedioAddrBean;
-import org.easydarwin.easyplayer.data.VideoSource;
+import org.easydarwin.easyplayer.bean.VideoAddrBean;
+import org.easydarwin.easyplayer.bean.VideoSource;
 import org.easydarwin.easyplayer.databinding.ActivityPlayListBinding;
 import org.easydarwin.easyplayer.databinding.VideoSourceItemBinding;
 import org.easydarwin.easyplayer.util.FileUtil;
-import org.easydarwin.easyplayer.util.SPUtil;
 import org.easydarwin.easyplayer.views.ProVideoView;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
@@ -344,7 +340,7 @@ public class PlayListActivity extends AppCompatActivity implements View.OnClickL
 //            }
 //        } else if (requestCode == REQUEST_ADD_DEVICE) {
 //            if (data != null) {
-                VedioAddrBean bean = data.getParcelableExtra(DEVICE_INFO);
+                VideoAddrBean bean = data.getParcelableExtra(DEVICE_INFO);
                 StringBuilder  sb = new StringBuilder();
                 sb.append("rtsp://").append(bean.getIp()).append(":554/").append(bean.getRegCode()).append(".sdp");
 //                ContentValues cv = new ContentValues();

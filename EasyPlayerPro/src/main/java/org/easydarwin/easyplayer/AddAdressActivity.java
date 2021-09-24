@@ -1,17 +1,22 @@
 package org.easydarwin.easyplayer;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.juntai.wisdom.basecomponent.mvp.BasePresenter;
 
 import org.easydarwin.easyplayer.base.BaseAppActivity;
-import org.easydarwin.easyplayer.bean.VedioAddrBean;
+import org.easydarwin.easyplayer.bean.VideoAddrBean;
+import org.easydarwin.easyplayer.util.HawkUtils;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * created by 8级大的狂风
@@ -37,6 +42,19 @@ public class AddAdressActivity extends BaseAppActivity implements View.OnClickLi
      * 请输入注册码
      */
     private EditText mNewMediaRegCodeEt;
+    /**
+     * 智能取证S
+     */
+    private RadioButton mRtspRb;
+    /**
+     * 智能取证M
+     */
+    private RadioButton mRtmpRb;
+    private RadioGroup mUrlTypeRg;
+    /**
+     * 取消
+     */
+    private TextView mCancelTv;
 
     @Override
     protected BasePresenter createPresenter() {
@@ -50,30 +68,45 @@ public class AddAdressActivity extends BaseAppActivity implements View.OnClickLi
         switch (v.getId()) {
             case R.id.save_device_tv:
                 String name = mDevNameEt.getText().toString().trim();
-//                String ip = binding.newMediaSourceIpEt.getText().toString().trim();
+                //                String ip = binding.newMediaSourceIpEt.getText().toString().trim();
                 String regCode = mNewMediaRegCodeEt.getText().toString().trim();
                 if (TextUtils.isEmpty(name)) {
                     Toast.makeText(getApplicationContext(), "请输入设备名称", Toast.LENGTH_LONG).show();
                     return;
                 }
-//                if (TextUtils.isEmpty(ip)) {
-//                    Toast.makeText(getApplicationContext(), "请输入IP地址", Toast.LENGTH_LONG).show();
-//                    return;
-//                }
+                //                if (TextUtils.isEmpty(ip)) {
+                //                    Toast.makeText(getApplicationContext(), "请输入IP地址", Toast.LENGTH_LONG).show();
+                //                    return;
+                //                }
                 if (TextUtils.isEmpty(regCode)) {
                     Toast.makeText(getApplicationContext(), "请输入注册码", Toast.LENGTH_LONG).show();
                     return;
                 }
-                VedioAddrBean vedioAddrBean = new VedioAddrBean();
-                vedioAddrBean.setName(name);
-//                vedioAddrBean.setIp(ip);
-                vedioAddrBean.setRegCode(regCode);
+                VideoAddrBean videoAddrBean = new VideoAddrBean();
+                videoAddrBean.setName(name);
+                //                vedioAddrBean.setIp(ip);
+                StringBuilder sb = new StringBuilder();
+
+                if (mRtspRb.isChecked()) {
+                    videoAddrBean.setUrlType(1);
+                    videoAddrBean.setUrl(sb.append("rtsp://").append(HawkUtils.getIP()).append(":554/").append(regCode).append(".sdp").toString());
+                } else {
+                    videoAddrBean.setUrlType(0);
+                    videoAddrBean.setUrl(sb.append("rtmp://").append(HawkUtils.getIP()).append(":10935/hls/").append(regCode).append(".sdp").toString());
+
+                }
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                videoAddrBean.setAddTime(sdf.format(new Date()));
+                videoAddrBean.setRegCode(regCode);
                 Intent intent = new Intent();
-                intent.putExtra(DEVICE_INFO, vedioAddrBean);
+                intent.putExtra(DEVICE_INFO, videoAddrBean);
                 setResult(REQUEST_ADD_DEVICE, intent);
                 finish();
                 break;
             default:
+                break;
+            case R.id.cancel_tv:
+                finish();
                 break;
         }
     }
@@ -91,6 +124,11 @@ public class AddAdressActivity extends BaseAppActivity implements View.OnClickLi
         mNewMediaSourceIpEt = (EditText) findViewById(R.id.new_media_source_ip_et);
         mNewMediaRegCodeEt = (EditText) findViewById(R.id.new_media_reg_code_et);
         mSaveDeviceTv.setOnClickListener(this);
+        mRtspRb = (RadioButton) findViewById(R.id.rtsp_rb);
+        mRtmpRb = (RadioButton) findViewById(R.id.rtmp_rb);
+        mUrlTypeRg = (RadioGroup) findViewById(R.id.url_type_rg);
+        mCancelTv = (TextView) findViewById(R.id.cancel_tv);
+        mCancelTv.setOnClickListener(this);
     }
 
 

@@ -1,4 +1,4 @@
-package org.easydarwin.easyplayer.fragments;
+package org.easydarwin.easyplayer.main.fragments.filerecord;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
@@ -24,7 +24,6 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
-import org.easydarwin.easyplayer.PlayListActivity;
 import org.easydarwin.easyplayer.ProVideoActivity;
 import org.easydarwin.easyplayer.R;
 import org.easydarwin.easyplayer.databinding.FragmentMediaFileBinding;

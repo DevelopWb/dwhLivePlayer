@@ -30,7 +30,6 @@ public class VideoRecordFragment extends BaseRecyclerviewFragment<MainPagePresen
     protected void initView() {
         super.initView();
         mSmartrefreshlayout.setEnableLoadMore(false);
-        adapter.setNewData(getBaseActivity().getTestData());
     }
 
     @Override
