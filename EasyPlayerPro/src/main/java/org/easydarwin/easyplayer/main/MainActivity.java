@@ -12,7 +12,7 @@ import com.juntai.wisdom.basecomponent.base.BaseMvpActivity;
 import org.easydarwin.easyplayer.R;
 import org.easydarwin.easyplayer.base.customview.CustomViewPager;
 import org.easydarwin.easyplayer.base.customview.MainPagerAdapter;
-import org.easydarwin.easyplayer.main.fragments.FileRecordFragment;
+import org.easydarwin.easyplayer.main.fragments.filerecord.FileRecordFragment;
 import org.easydarwin.easyplayer.main.fragments.HomePageFragment;
 import org.easydarwin.easyplayer.main.fragments.MyCenterFragment;
 
@@ -40,11 +40,7 @@ public class MainActivity extends BaseMvpActivity<MainPagePresent> implements Vi
         mainTablayout = findViewById(R.id.main_tablayout);
         mainLayout = findViewById(R.id.main_layout);
         mainViewpager.setScanScroll(false);
-        mFragments.append(0, new HomePageFragment());//
-        mFragments.append(1, new FileRecordFragment());//
-        mFragments.append(2, new MyCenterFragment());//设置
-        //
-        mainViewpager.setOffscreenPageLimit(4);
+
         initTab();
         initLeftBackTv(false);
         setTitleName("聊天");
@@ -58,6 +54,11 @@ public class MainActivity extends BaseMvpActivity<MainPagePresent> implements Vi
 
 
     public void initTab() {
+        mFragments.append(0, new HomePageFragment());//
+        mFragments.append(1, new FileRecordFragment());//
+        mFragments.append(2, new MyCenterFragment());//设置
+        //
+        mainViewpager.setOffscreenPageLimit(3);
         adapter = new MainPagerAdapter(getSupportFragmentManager(), getApplicationContext(), title, tabDrawables,
                 mFragments);
         mainViewpager.setAdapter(adapter);
