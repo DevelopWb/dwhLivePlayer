@@ -92,7 +92,7 @@ public class AddAdressActivity extends BaseAppActivity implements View.OnClickLi
                     videoAddrBean.setUrl(sb.append("rtsp://").append(HawkUtils.getIP()).append(":554/").append(regCode).append(".sdp").toString());
                 } else {
                     videoAddrBean.setUrlType(0);
-                    videoAddrBean.setUrl(sb.append("rtmp://").append(HawkUtils.getIP()).append(":10935/hls/").append(regCode).append(".sdp").toString());
+                    videoAddrBean.setUrl(sb.append("rtmp://").append(HawkUtils.getIP()).append(":10935/hls/").append(regCode).toString());
 
                 }
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

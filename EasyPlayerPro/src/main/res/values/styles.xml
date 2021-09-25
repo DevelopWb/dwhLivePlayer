@@ -43,5 +43,12 @@
         <item name="android:minHeight">10dp</item>
         <item name="android:thumb">@drawable/new_thumb</item>
     </style>
-
+    <style name="bt_bg_style">
+        <item name="android:background">@drawable/app_bt_bg_accent</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">36dp</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">16dp</item>
+    </style>
 </resources>

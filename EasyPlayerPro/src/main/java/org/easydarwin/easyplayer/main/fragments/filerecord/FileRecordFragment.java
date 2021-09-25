@@ -81,10 +81,10 @@ public class FileRecordFragment extends BaseMvpFragment<MainPagePresent> impleme
         initTab();
     }
     public void initTab() {
-        mFragments.append(0, new PicRecordFragment());//
-        mFragments.append(1, new VideoRecordFragment());//
+        mFragments.append(0, LocalFileFragment.newInstance(false));//
+        mFragments.append(1, LocalFileFragment.newInstance(true));//
         //
-        mFileViewpager.setOffscreenPageLimit(3);
+        mFileViewpager.setOffscreenPageLimit(2);
         adapter = new MainPagerAdapter(getChildFragmentManager(),mContext, title, tabDrawables,
                 mFragments);
         mFileViewpager.setAdapter(adapter);
@@ -94,11 +94,7 @@ public class FileRecordFragment extends BaseMvpFragment<MainPagePresent> impleme
         for (int i = 0; i < title.length; i++) {
             TabLayout.Tab tab = mFileTablayout.newTab();
             if (tab != null) {
-                if (i == title.length - 1) {
-                    tab.setCustomView(adapter.getTabView(i, true));
-                } else {
-                    tab.setCustomView(adapter.getTabView(i, false));
-                }
+                tab.setCustomView(adapter.getTabView(i));
                 mFileTablayout.addTab(tab);
             }
         }

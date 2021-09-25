@@ -10,6 +10,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.juntai.wisdom.basecomponent.utils.DisplayUtil;
+
 import org.easydarwin.easyplayer.R;
 
 
@@ -47,6 +49,21 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
         return mFragments == null ? 0 : mFragments.size();
     }
 
+    /**
+     * 自定义底部消息tab
+     * @param position
+     * @return
+     */
+    public View getTabView(int position) {
+        View v = LayoutInflater.from(mContext).inflate(R.layout.custom_tabitem, null);
+        ImageView img = v.findViewById(R.id.tabitem_image);
+        img.setVisibility(View.GONE);
+        img.setImageResource(images[position]);
+        TextView title = v.findViewById(R.id.tabitem_text);
+        title.setText(titles[position]);
+        title.setTextSize(14);
+        return v;
+    }
     /**
      * 自定义底部消息tab
      * @param position

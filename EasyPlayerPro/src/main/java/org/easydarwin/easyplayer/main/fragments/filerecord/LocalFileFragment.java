@@ -45,7 +45,13 @@ public class LocalFileFragment extends Fragment implements CompoundButton.OnChec
     File mRoot = null;
     File[] mSubFiles;
     int mImgHeight;
-
+    public static LocalFileFragment newInstance(boolean isVideo) {
+        Bundle args = new Bundle();
+        args.putBoolean(KEY_IS_RECORD, isVideo);
+        LocalFileFragment fragment = new LocalFileFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

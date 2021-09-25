@@ -1,6 +1,7 @@
 package org.easydarwin.easyplayer.main.fragments;
 
 
+import android.content.Intent;
 import android.view.View;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -8,6 +9,8 @@ import com.juntai.wisdom.basecomponent.base.BaseMvpFragment;
 import com.juntai.wisdom.basecomponent.utils.ToastUtils;
 import com.orhanobut.hawk.Hawk;
 
+import org.easydarwin.easyplayer.PlayListActivity;
+import org.easydarwin.easyplayer.ProVideoActivity;
 import org.easydarwin.easyplayer.R;
 import org.easydarwin.easyplayer.base.BaseRecyclerviewFragment;
 import org.easydarwin.easyplayer.bean.VideoAddrBean;
@@ -42,6 +45,9 @@ public class HomePageFragment extends BaseRecyclerviewFragment<MainPagePresent> 
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 VideoAddrBean videoAddrBean = (VideoAddrBean) adapter.getData().get(position);
                 ToastUtils.toast(mContext,videoAddrBean.getUrl());
+                Intent i = new Intent(mContext, ProVideoActivity.class);
+                i.putExtra("videoPath", videoAddrBean.getUrl());
+                startActivity(i);
             }
         });
     }
@@ -50,7 +56,7 @@ public class HomePageFragment extends BaseRecyclerviewFragment<MainPagePresent> 
      * 添加数据
      */
     public void  addAdapterData(VideoAddrBean videoAddrBean){
-        adapter.addData(videoAddrBean);
+        adapter.addData(0,videoAddrBean);
         Hawk.put(HawkUtils.ALL_DEVS,adapter.getData());
     }
     @Override

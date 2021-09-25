@@ -2,6 +2,7 @@ package org.easydarwin.easyplayer.main.fragments;
 
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,11 +12,14 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.juntai.wisdom.basecomponent.base.BaseMvpFragment;
+import com.juntai.wisdom.basecomponent.utils.HawkProperty;
 import com.juntai.wisdom.basecomponent.utils.ToastUtils;
+import com.orhanobut.hawk.Hawk;
 
 import org.easydarwin.easyplayer.R;
 import org.easydarwin.easyplayer.main.MainPageContract;
 import org.easydarwin.easyplayer.main.MainPagePresent;
+import org.easydarwin.easyplayer.util.HawkUtils;
 import org.easydarwin.easyplayer.util.SPUtil;
 
 
@@ -24,14 +28,19 @@ import org.easydarwin.easyplayer.util.SPUtil;
  * @description 描述  homepage
  * @date 2021/4/18 14:59
  */
-public class MyCenterFragment extends BaseMvpFragment<MainPagePresent> implements MainPageContract.IMainPageView,
-        View.OnClickListener {
+public class MyCenterFragment extends BaseMvpFragment<MainPagePresent> implements MainPageContract.IMainPageView
+    {
 
 
     private TextView mRegistCodeValue;
     private EditText mPushServerIpEt;
     private Switch mUdpSwitch;
     private Switch mCodecSwitch;
+    private View view;
+    /**
+     * 保存
+     */
+    private TextView mSaveIpConfigTv;
 
     @Override
     public void onDestroy() {
@@ -64,9 +73,6 @@ public class MyCenterFragment extends BaseMvpFragment<MainPagePresent> implement
     }
 
 
-    @Override
-    public void onClick(View v) {
-    }
 
     @Override
     protected int getLayoutRes() {
@@ -77,10 +83,11 @@ public class MyCenterFragment extends BaseMvpFragment<MainPagePresent> implement
     protected void initView() {
 
         mRegistCodeValue = (TextView) getView(R.id.regist_code_value);
+        mRegistCodeValue.setText(Hawk.get(HawkProperty.REG_CODE));
         mPushServerIpEt = (EditText) getView(R.id.push_server_ip_et);
         mUdpSwitch = (Switch) getView(R.id.udp_switch);
         mCodecSwitch = (Switch) getView(R.id.codec_switch);
-
+        mPushServerIpEt.setText(HawkUtils.getIP());
         mUdpSwitch.setChecked(SPUtil.getUDPMode(mContext));
         mCodecSwitch.setChecked(SPUtil.getMediaCodec(mContext));
 
@@ -97,11 +104,24 @@ public class MyCenterFragment extends BaseMvpFragment<MainPagePresent> implement
                 SPUtil.setMediaCodec(mContext, isChecked);
             }
         });
+        mSaveIpConfigTv = (TextView) getView(R.id.save_ip_config_tv);
+        mSaveIpConfigTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (TextUtils.isEmpty(getBaseActivity().getTextViewValue(mPushServerIpEt))) {
+                    ToastUtils.toast(mContext,"请输入IP地址");
+                    return;
+                }
+                Hawk.put(HawkUtils.IP,getBaseActivity().getTextViewValue(mPushServerIpEt));
+                ToastUtils.toast(mContext,"保存成功");
+            }
+        });
     }
 
     @Override
     protected void initData() {
 
     }
+
 
 }
